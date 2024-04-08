@@ -58,6 +58,27 @@ def index():
     return render_template('index.html', tickets=tickets)
 
 
+@app.route('/process_booking', methods=['POST'])
+def process_booking():
+    data = request.form
+    valid_quantities = {}
+
+    for key, value in data.items():
+        function_name, quantity_type = key.split('_')
+        quantity = int(value)
+        if quantity > 0:
+            # Save quantities in a dictionary
+            if function_name not in valid_quantities:
+                valid_quantities[function_name] = {}
+            valid_quantities[function_name][quantity_type] = quantity
+
+    # Print quantities
+    for function_name, quantities in valid_quantities.items():
+        print(f"Function Name: {function_name}")
+        for quantity_type, quantity in quantities.items():
+            print(f"- {quantity_type}: {quantity}")
+
+    return "Valid quantities processed successfully"
 
 
 if __name__ == "__main__":
