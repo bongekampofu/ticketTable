@@ -1,1 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Tickets</title>
+    <style>
+        .quantity { background: #dfe7ff; color: #4e46e5;}
+    </style>
+</head>
+<body>
+    <form id="bookForm" method="post">
+        <table id="bookingsTable">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>General Price</th>
+                    <th>Quantity</th>
+                    <th>Royal Price</th>
+                    <th>Quantity</th>
+                    <th>Platinum Price</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                <tr>
+                    <td>{{ ticket.functionName }}</td>
+                    <td>{{ ticket.generalPrice }}</td>
+                    <td>
+                        <select class="quantity gQuantity">
+                            {% for i in range(100) %}
+                            <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>{{ ticket.royalPrice }}</td>
+                    <td>
+                        <select class="quantity rQuantity">
+                            {% for i in range(100) %}
+                            <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>{{ ticket.platinumPrice }}</td>
+                    <td>
+                        <select class="quantity pQuantity">
+                            {% for i in range(100) %}
+                            <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td class="totalPrice">0</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
 
+    Grand Total: <span id="output">?</span> <br>
+
+    <script>
+        // Total price span output
+        var totalPriceOutput = document.getElementById("output");
+        var grandTotal = 0;
+
+        // Table with id "bookingsTable"
+        var table = document.getElementById("bookingsTable");
+
+        // Iterate through each row in the table
+        Array.from(document.querySelectorAll('.quantity')).forEach(select => {
+            select.addEventListener('change', function() {
+                var row = this.parentNode.parentNode;
+
+                var generalQuantity = parseInt(row.querySelector('.gQuantity').value);
+                var royalQuantity = parseInt(row.querySelector('.rQuantity').value);
+                var platinumQuantity = parseInt(row.querySelector('.pQuantity').value);
+
+                var generalPrice = parseFloat(row.cells[1].textContent);
+                var royalPrice = parseFloat(row.cells[3].textContent);
+                var platinumPrice = parseFloat(row.cells[5].textContent);
+
+                var totalPrice = (generalQuantity * generalPrice) + (royalQuantity * royalPrice) + (platinumQuantity * platinumPrice);
+
+                row.cells[7].textContent = totalPrice.toFixed(2);
+
+                grandTotal = 0;
+                Array.from(document.querySelectorAll('.totalPrice')).forEach(cell => {
+                    grandTotal += parseFloat(cell.textContent);
+                });
+                totalPriceOutput.textContent = grandTotal.toFixed(2);
+            });
+        });
+    </script>
+</body>
+</html>
