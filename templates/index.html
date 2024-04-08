@@ -7,9 +7,12 @@
     <style>
         .quantity { background: #dfe7ff; color: #4e46e5;}
     </style>
+
+
 </head>
 <body>
-    <form id="bookForm" method="post">
+    <form id="bookForm" method="post" action="/process_booking">
+
         <table id="bookingsTable">
             <thead>
                 <tr>
@@ -29,7 +32,7 @@
                     <td>{{ ticket.functionName }}</td>
                     <td>{{ ticket.generalPrice }}</td>
                     <td>
-                        <select class="quantity gQuantity">
+                        <select class="quantity gQuantity" name="{{ ticket.functionName }}_gQuantity">
                             {% for i in range(100) %}
                             <option value="{{ i }}">{{ i }}</option>
                             {% endfor %}
@@ -37,7 +40,7 @@
                     </td>
                     <td>{{ ticket.royalPrice }}</td>
                     <td>
-                        <select class="quantity rQuantity">
+                        <select class="quantity rQuantity" name="{{ ticket.functionName }}_rQuantity">
                             {% for i in range(100) %}
                             <option value="{{ i }}">{{ i }}</option>
                             {% endfor %}
@@ -45,7 +48,7 @@
                     </td>
                     <td>{{ ticket.platinumPrice }}</td>
                     <td>
-                        <select class="quantity pQuantity">
+                        <select class="quantity pQuantity" name="{{ ticket.functionName }}_pQuantity">
                             {% for i in range(100) %}
                             <option value="{{ i }}">{{ i }}</option>
                             {% endfor %}
@@ -56,6 +59,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        <input type="submit" value="Submit">
     </form>
 
     Grand Total: <span id="output">?</span> <br>
@@ -92,6 +96,8 @@
                 totalPriceOutput.textContent = grandTotal.toFixed(2);
             });
         });
+
+
     </script>
 </body>
 </html>
